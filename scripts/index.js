@@ -10,11 +10,11 @@ initialCards.forEach(({ name, link }) => {
 	listElement.querySelector('.card__delete-button');
 
 	placesList.append(listElement);
+});
 
-	addEventListener('click', function (addAnEvent) {
-		const cardDeleteButton = addAnEvent.target.closest('.card');
-		cardDeleteButton.remove();
-	});
+addEventListener('click', function (addAnEvent) {
+	const cardDeleteButton = addAnEvent.target.closest('.card');
+	cardDeleteButton.remove();
 });
 
 console.log(initialCards);
