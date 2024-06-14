@@ -1,11 +1,4 @@
-// форма редактирования профиля и ее инпуты
-const formEditProfile = document.querySelector('[name="edit-profile"]')
-const userNameInput = formEditProfile.querySelector('[name="name"]')
-const userJobInput = formEditProfile.querySelector('[name="description"]')
-// форма добавления карточки и ее инпуты
-const formAddCard = document.querySelector('[name="new-place"]')
-const linkImageInput = formEditProfile.querySelector('[name="place-name"]')
-const nameImageInput = formEditProfile.querySelector('[name="link"]')
+
 // *****************
 
 // функции для закрытия/открытия попапов
@@ -30,16 +23,6 @@ const closePopup = (popup) => {
   document.removeEventListener('keyup', handleEsc)
   popup.classList.remove('popup_is-opened')
 }
-
-// Обработчик «отправки» формы
-function handleFormSubmit(event) {
-  event.preventDefault();
-
-}
-
-// слушатели события отправки формы
-formEditProfile.addEventListener('submit', handleFormSubmit);
-formAddCard.addEventListener('submit', handleFormSubmit);
 
 export {
   openPopup,
