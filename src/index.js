@@ -10,6 +10,9 @@ const userJob = document.querySelector(".profile__description");
 const popups = document.querySelectorAll(".popup");
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupAddCard = document.querySelector(".popup_type_new-card");
+const popapShowImage = document.querySelector(".popup_type_image")
+const imageElem = popapShowImage.querySelector(".popup__image")
+const captionElem = popapShowImage.querySelector(".popup__caption")
 
 // форма редактирования профиля и ее инпуты
 const formEditProfile = document.querySelector('[name="edit-profile"]');
@@ -43,9 +46,17 @@ popups.forEach((popup) => {
 });
 
 initialCards.forEach((item) => {
-  const card = createCard(item);
+  const card = createCard(item, showImage);
   placesList.append(card);
 });
+
+// функция получает данные названия и ссылки с карточки и подставаляет их в попап
+function showImage(data) {
+  imageElem.src = data.link
+  imageElem.alt = data.name
+  captionElem.textContent = data.name
+  openPopup(popapShowImage)
+}
 
 // обработчики события клика на открытие попапов
 profileEditBtn.addEventListener("click", () => {
@@ -70,7 +81,7 @@ formEditProfile.addEventListener("submit", (event) => {
 formAddCard.addEventListener("submit", (event) => {
   event.preventDefault();
   const formData = { link: linkImageInput.value, name: nameImageInput.value };
-  const card = createCard(formData);
+  const card = createCard(formData, showImage);
   placesList.prepend(card);
   closePopup(popupAddCard);
   formAddCard.reset();
