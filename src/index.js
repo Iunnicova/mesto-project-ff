@@ -2,6 +2,7 @@ import "./pages/index.css";
 import { initialCards } from "./utils/constans.js";
 import { openPopup, closePopup } from "./scripts/modal.js";
 import { createCard } from "./scripts/card.js";
+import { enableValidation, clearErrorFields } from "./scripts/validate.js";
 
 const userName = document.querySelector(".profile__title");
 const userJob = document.querySelector(".profile__description");
@@ -10,9 +11,9 @@ const userJob = document.querySelector(".profile__description");
 const popups = document.querySelectorAll(".popup");
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupAddCard = document.querySelector(".popup_type_new-card");
-const popapShowImage = document.querySelector(".popup_type_image")
-const imageElem = popapShowImage.querySelector(".popup__image")
-const captionElem = popapShowImage.querySelector(".popup__caption")
+const popapShowImage = document.querySelector(".popup_type_image");
+const imageElem = popapShowImage.querySelector(".popup__image");
+const captionElem = popapShowImage.querySelector(".popup__caption");
 
 // форма редактирования профиля и ее инпуты
 const formEditProfile = document.querySelector('[name="edit-profile"]');
@@ -52,10 +53,10 @@ initialCards.forEach((item) => {
 
 // функция получает данные названия и ссылки с карточки и подставаляет их в попап
 function showImage(data) {
-  imageElem.src = data.link
-  imageElem.alt = data.name
-  captionElem.textContent = data.name
-  openPopup(popapShowImage)
+  imageElem.src = data.link;
+  imageElem.alt = data.name;
+  captionElem.textContent = data.name;
+  openPopup(popapShowImage);
 }
 
 // обработчики события клика на открытие попапов
@@ -63,10 +64,13 @@ profileEditBtn.addEventListener("click", () => {
   userNameInput.value = userName.textContent;
   userJobInput.value = userJob.textContent;
   openPopup(popupEditProfile);
+  clearErrorFields(formEditProfile, formConfig);
 });
 
 cardAddBtn.addEventListener("click", () => {
   openPopup(popupAddCard);
+  clearErrorFields(formAddCard, formConfig);
+  formAddCard.reset();
 });
 
 // слушатель события отправки формы редоктирования профиля
@@ -86,3 +90,14 @@ formAddCard.addEventListener("submit", (event) => {
   closePopup(popupAddCard);
   formAddCard.reset();
 });
+
+// Валидация Форм
+const formConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+enableValidation(formConfig);
