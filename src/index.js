@@ -6,10 +6,12 @@ import { enableValidation, clearErrorFields } from "./scripts/validate.js";
 
 const userName = document.querySelector(".profile__title");
 const userJob = document.querySelector(".profile__description");
+const userAvatar = document.querySelector(".profile__image");
 
 //попапы
 const popups = document.querySelectorAll(".popup");
 const popupEditProfile = document.querySelector(".popup_type_edit");
+const popupChangeAvatar = document.querySelector(".popup_type_change-avatar");
 const popupAddCard = document.querySelector(".popup_type_new-card");
 const popapShowImage = document.querySelector(".popup_type_image");
 const imageElem = popapShowImage.querySelector(".popup__image");
@@ -20,6 +22,12 @@ const formEditProfile = document.querySelector('[name="edit-profile"]');
 const userNameInput = formEditProfile.querySelector('[name="name"]');
 const userJobInput = formEditProfile.querySelector('[name="description"]');
 
+// форма изменения аватара и ее инпуты
+const formChangeAvatar = document.querySelector('[name="form-change-avatar"]');
+const userAvatarInput = formChangeAvatar.querySelector(
+  '[name="change-avatar"]'
+);
+
 // форма добавления карточки и ее инпуты
 const formAddCard = document.querySelector('[name="new-place"]');
 const linkImageInput = formAddCard.querySelector('[name="link"]');
@@ -28,6 +36,7 @@ const nameImageInput = formAddCard.querySelector('[name="place-name"]');
 // кнопки открытия попапов
 const profileEditBtn = document.querySelector(".profile__edit-button");
 const cardAddBtn = document.querySelector(".profile__add-button");
+const avatarChangeBtn = document.querySelector(".profile__change-avatar-btn");
 
 // контейнер для вставки карточек
 const placesList = document.querySelector(".places__list");
@@ -67,6 +76,12 @@ profileEditBtn.addEventListener("click", () => {
   clearErrorFields(formEditProfile, formConfig);
 });
 
+avatarChangeBtn.addEventListener("click", () => {
+  openPopup(popupChangeAvatar);
+  clearErrorFields(formChangeAvatar, formConfig);
+  formAddCard.reset();
+});
+
 cardAddBtn.addEventListener("click", () => {
   openPopup(popupAddCard);
   clearErrorFields(formAddCard, formConfig);
@@ -81,6 +96,12 @@ formEditProfile.addEventListener("submit", (event) => {
   closePopup(popupEditProfile);
 });
 
+formChangeAvatar.addEventListener("submit", (event) => {
+  event.preventDefault();
+  userAvatar.src = userAvatarInput.value;
+  closePopup(popupChangeAvatar);
+});
+
 //слушатель события отправки формы добавление карточки
 formAddCard.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -88,10 +109,10 @@ formAddCard.addEventListener("submit", (event) => {
   const card = createCard(formData, showImage);
   placesList.prepend(card);
   closePopup(popupAddCard);
-  formAddCard.reset();
 });
 
 // Валидация Форм
+
 const formConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
