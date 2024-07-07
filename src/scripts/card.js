@@ -1,4 +1,4 @@
-import { deleteCard, addLike, deleteLike } from "./api";
+import { deleteCard } from "./api";
 
 const cardTemplate = document.querySelector("#card-template").content;
 
@@ -12,25 +12,8 @@ function handleDeleteCard(card, cardId) {
       console.error(`Ошибка: ${err}`);
     });
 }
-// Функция добавляет/удаляет лайк, в зависимости от того, установлен был или нет
-function handleLikeCard(likeButton, likeInfo, cardId) {
-  const handleLikeFunction = likeButton.classList.contains(
-    "card__like-button_is-active"
-  )
-    ? deleteLike
-    : addLike;
 
-  handleLikeFunction(cardId)
-    .then((cardData) => {
-      likeInfo.textContent = cardData.likes.length;
-      likeButton.classList.toggle("card__like-button_is-active");
-    })
-    .catch((err) => {
-      console.error(`Ошибка: ${err}`);
-    });
-}
-
-function createCard(dataCard, func, userId) {
+function createCard(dataCard, showImage, userId, processLike) {
   const listElement = cardTemplate
     .querySelector(".places__item")
     .cloneNode(true);
@@ -45,11 +28,11 @@ function createCard(dataCard, func, userId) {
   }
 
   cardLikeButton.addEventListener("click", () => {
-    handleLikeCard(cardLikeButton, cardLikeInfo, dataCard._id);
+    processLike(cardLikeButton, cardLikeInfo, dataCard._id);
   });
 
   imgElement.addEventListener("click", () => {
-    func(dataCard);
+    showImage(dataCard);
   });
 
   imgElement.alt = dataCard.name;
@@ -59,11 +42,11 @@ function createCard(dataCard, func, userId) {
 
   if (dataCard.owner._id !== userId) {
     buttonElement.classList.add("card__delete-button_hidden");
+  } else {
+    buttonElement.addEventListener("click", () => {
+      handleDeleteCard(listElement, dataCard._id);
+    });
   }
-
-  buttonElement.addEventListener("click", () => {
-    handleDeleteCard(listElement, dataCard._id);
-  });
 
   return listElement;
 }

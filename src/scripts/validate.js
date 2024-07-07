@@ -28,7 +28,7 @@ function toggleButton(inputList, buttonElem, formData) {
 
 function deactivateButton(buttonElem, formData) {
   buttonElem.classList.add(formData.inactiveButtonClass);
-  buttonElem.setAttribute("disabled", "disabled");
+  buttonElem.setAttribute("disabled", true);
 }
 
 export function clearErrorFields(formElem, formData) {

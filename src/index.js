@@ -8,6 +8,8 @@ import {
   updateUserAvatar,
   getAllCards,
   addNewCard,
+  addLike,
+  deleteLike,
 } from "./scripts/api.js";
 
 // ***************** КОНСТАНТЫ
@@ -67,9 +69,8 @@ Promise.all([getUserInfo(), getAllCards()])
     userJob.textContent = userData.about;
     userAvatar.src = userData.avatar;
     userId = userData._id;
-    console.log(cardData);
     cardData.forEach((card) => {
-      placesList.append(createCard(card, showImage, userId));
+      placesList.append(createCard(card, showImage, userId, handleLikeCard));
     });
   })
   .catch((err) => {
@@ -138,9 +139,9 @@ function handleEditProfile(evt) {
     name: userNameInput.value,
     job: userJobInput.value,
   })
-    .then(() => {
-      userName.textContent = userNameInput.value;
-      userJob.textContent = userJobInput.value;
+    .then((userData) => {
+      userName.textContent = userData.name;
+      userJob.textContent = userData.about;
       closePopup(popupEditProfile);
     })
     .catch((err) => {
@@ -184,7 +185,9 @@ function handleAddCard(evt) {
     link: linkImageInput.value,
   })
     .then((newCard) => {
-      placesList.prepend(createCard(newCard, showImage, userId));
+      placesList.prepend(
+        createCard(newCard, showImage, userId, handleLikeCard)
+      );
       closePopup(popupAddCard);
     })
     .catch((err) => {
@@ -197,6 +200,24 @@ function handleAddCard(evt) {
 
 //слушатель события отправки формы добавление карточки
 formAddCard.addEventListener("submit", handleAddCard);
+
+// Функция добавляет/удаляет лайк, в зависимости от того, установлен был или нет
+function handleLikeCard(likeButton, likeInfo, cardId) {
+  const handleLikeFunction = likeButton.classList.contains(
+    "card__like-button_is-active"
+  )
+    ? deleteLike
+    : addLike;
+
+  handleLikeFunction(cardId)
+    .then((cardData) => {
+      likeInfo.textContent = cardData.likes.length;
+      likeButton.classList.toggle("card__like-button_is-active");
+    })
+    .catch((err) => {
+      console.error(`Ошибка: ${err}`);
+    });
+}
 
 // **********************
 
